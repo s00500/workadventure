@@ -198,8 +198,12 @@ const roomManager: IRoomManagerServer = {
         callback(null, new EmptyMessage());
     },
     sendGlobalAdminMessage(call: ServerUnaryCall<AdminGlobalMessage>, callback: sendUnaryData<EmptyMessage>): void {
-        throw new Error('Not implemented yet');
-        // TODO
+        let msg = new PlayGlobalMessage();
+        msg.setType("message");
+        msg.setId("1"); // TODO: I replicated this from the admin console, not sure what the ID is supposed to do
+        msg.setMessage(call.request.getMessage())
+
+        socketManager.emitPlayGlobalMessageAllRooms(msg);
         callback(null, new EmptyMessage());
     },
     ban(call: ServerUnaryCall<BanMessage>, callback: sendUnaryData<EmptyMessage>): void {

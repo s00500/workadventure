@@ -595,6 +595,23 @@ export class SocketManager {
             //}
         }
     }
+    
+    emitPlayGlobalMessageAllRooms(playGlobalMessage: PlayGlobalMessage) {
+        this.rooms.forEach((room: GameRoom) => {
+            try {
+                const serverToClientMessage = new ServerToClientMessage();
+                serverToClientMessage.setPlayglobalmessage(playGlobalMessage);
+                
+                for (const [id, user] of room.getUsers().entries()) {
+                    user.socket.write(serverToClientMessage);
+                }
+            } catch (e) {
+                console.error('An error occurred on "emitPlayGlobalMessageAllRooms" event');
+                console.error(e);
+
+            }
+        });
+    }
 
     emitPlayGlobalMessage(room: GameRoom, playGlobalMessage: PlayGlobalMessage) {
         try {
